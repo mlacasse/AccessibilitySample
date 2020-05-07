@@ -22,7 +22,8 @@
     "chai": "^4.2.0",
     "node-datetime": "^2.1.2",
     "node-fetch": "^2.6.0",
-    "webdriverio": "^5.16.7"
+    "webdriverio": "^5.16.7",
+    "minimist": ">=1.2.3"
   },
   "engines": {
     "node": "< 11.0"
