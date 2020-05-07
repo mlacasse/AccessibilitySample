@@ -1,10 +1,10 @@
 import React, { PureComponent } from 'react';
-import { FlatList, NativeModules, ScrollView } from 'react-native';
+import { AppState, FlatList, NativeModules, ScrollView } from 'react-native';
 import { connect } from 'react-redux';
 
 import Photo from './Photo';
 
-const { OrientationLock } = NativeModules;
+const { OrientationLock, AccessibilityInfo } = NativeModules;
 
 class AppComponent extends PureComponent {
   constructor(props) {
@@ -21,7 +21,29 @@ class AppComponent extends PureComponent {
     OrientationLock.setRotationMode(6);
   }
 
-  renderBlurry = (data) => {
+  componentDidMount() {
+    AppState.addEventListener('change', this._handleAppStateChange);
+
+    if (AccessibilityInfo) {
+      AccessibilityInfo.get()
+        .then(info => console.log('AccessibilityInfo', info))
+        .catch(err => console.error(err));
+    }
+  }
+
+  componentWillUnmount() {
+    AppState.removeEventListener('change', this._handleAppStateChange);
+  }
+
+  _handleAppStateChange = (newAppState) => {
+    if (AccessibilityInfo && newAppState === 'active') {
+      AccessibilityInfo.get()
+        .then(info => console.log('AppState', newAppState, 'AccessibilityInfo', info))
+        .catch(err => console.error(err));
+    }
+  };
+
+  _renderBlurry = (data) => {
     return (
       <Photo
         style={styles.wideStyle}
@@ -32,7 +54,7 @@ class AppComponent extends PureComponent {
     );
   };
 
-  renderLandscape = (data) => {
+  _renderLandscape = (data) => {
     return (
       <Photo
         style={styles.photoStyle}
@@ -43,7 +65,7 @@ class AppComponent extends PureComponent {
     );
   };
 
-  renderPoster = (data) => {
+  _renderPoster = (data) => {
     return (
       <Photo
         style={styles.posterStyle}
@@ -59,18 +81,18 @@ class AppComponent extends PureComponent {
 
     return (
       <ScrollView style={{ flex: 1 }}>
-        <FlatList horizontal keyExtractor={item => "" + item.id} data={posters} renderItem={this.renderPoster} />
-        <FlatList horizontal keyExtractor={item => "" + item.id} data={landscapes} renderItem={this.renderLandscape} />
-        <FlatList horizontal keyExtractor={item => "" + item.id} data={blurry} renderItem={this.renderBlurry} />
-        <FlatList horizontal keyExtractor={item => "" + item.id} data={posters} renderItem={this.renderPoster} />
-        <FlatList horizontal keyExtractor={item => "" + item.id} data={landscapes} renderItem={this.renderLandscape} />
-        <FlatList horizontal keyExtractor={item => "" + item.id} data={blurry} renderItem={this.renderBlurry} />
-        <FlatList horizontal keyExtractor={item => "" + item.id} data={posters} renderItem={this.renderPoster} />
-        <FlatList horizontal keyExtractor={item => "" + item.id} data={landscapes} renderItem={this.renderLandscape} />
-        <FlatList horizontal keyExtractor={item => "" + item.id} data={blurry} renderItem={this.renderBlurry} />
-        <FlatList horizontal keyExtractor={item => "" + item.id} data={posters} renderItem={this.renderPoster} />
-        <FlatList horizontal keyExtractor={item => "" + item.id} data={landscapes} renderItem={this.renderLandscape} />
-        <FlatList horizontal keyExtractor={item => "" + item.id} data={blurry} renderItem={this.renderBlurry} />
+        <FlatList horizontal keyExtractor={item => "" + item.id} data={posters} renderItem={this._renderPoster} />
+        <FlatList horizontal keyExtractor={item => "" + item.id} data={landscapes} renderItem={this._renderLandscape} />
+        <FlatList horizontal keyExtractor={item => "" + item.id} data={blurry} renderItem={this._renderBlurry} />
+        <FlatList horizontal keyExtractor={item => "" + item.id} data={posters} renderItem={this._renderPoster} />
+        <FlatList horizontal keyExtractor={item => "" + item.id} data={landscapes} renderItem={this._renderLandscape} />
+        <FlatList horizontal keyExtractor={item => "" + item.id} data={blurry} renderItem={this._renderBlurry} />
+        <FlatList horizontal keyExtractor={item => "" + item.id} data={posters} renderItem={this._renderPoster} />
+        <FlatList horizontal keyExtractor={item => "" + item.id} data={landscapes} renderItem={this._renderLandscape} />
+        <FlatList horizontal keyExtractor={item => "" + item.id} data={blurry} renderItem={this._renderBlurry} />
+        <FlatList horizontal keyExtractor={item => "" + item.id} data={posters} renderItem={this._renderPoster} />
+        <FlatList horizontal keyExtractor={item => "" + item.id} data={landscapes} renderItem={this._renderLandscape} />
+        <FlatList horizontal keyExtractor={item => "" + item.id} data={blurry} renderItem={this._renderBlurry} />
       </ScrollView>
     );
   };

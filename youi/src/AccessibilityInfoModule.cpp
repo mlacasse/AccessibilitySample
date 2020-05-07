@@ -1,5 +1,6 @@
 #include "AccessibilityInfoModule.h"
 
+#include <youireact/NativeModuleRegistry.h>
 #include <youireact/YiReactNativeView.h>
 
 using namespace yi::react;
@@ -14,10 +15,8 @@ AccessibilityInfoModule::AccessibilityInfoModule()
 #if !defined(YI_ANDROID) && !defined(YI_IOS) && !defined(YI_TVOS)
 YI_RN_DEFINE_EXPORT_METHOD(AccessibilityInfoModule, get)(Callback successCallback, Callback failedCallback)
 {
-    folly::dynamic errorInfo = folly::dynamic::object;
-    
-    errorInfo["message"] = "React Native AccessibilityInfoModule is not supported on this platform.";
-    
-    failedCallback({ ToDynamic(errorInfo) });
+    folly::dynamic errorInfo = folly::dynamic::object("message", "React Native AccessibilityInfoModule is not supported on this platform.");
+
+    failedCallback({ errorInfo });
 }
 #endif
