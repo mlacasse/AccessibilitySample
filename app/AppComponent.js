@@ -27,7 +27,7 @@ class AppComponent extends PureComponent {
     if (AccessibilityInfo) {
       AccessibilityInfo.get()
         .then(info => console.log('AccessibilityInfo', info))
-        .catch(err => console.error(err));
+        .catch(err => console.trace(err));
     }
   }
 
@@ -39,7 +39,7 @@ class AppComponent extends PureComponent {
     if (AccessibilityInfo && newAppState === 'active') {
       AccessibilityInfo.get()
         .then(info => console.log('AppState', newAppState, 'AccessibilityInfo', info))
-        .catch(err => console.error(err));
+        .catch(err => console.trace(err));
     }
   };
 

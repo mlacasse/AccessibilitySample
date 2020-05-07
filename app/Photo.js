@@ -43,12 +43,8 @@ class Photo extends PureComponent {
     this.setState({ focused: false });
   };
 
-  _onLoad = () => {
-    console.log(`Image ${this.props.title} success!`);
-  };
-
   _onError = () => {
-    console.log(`Image ${this.props.title} failed!  Check ${this.props.source.uri}!`);
+    console.trace(`Image ${this.props.title} failed!  Check ${this.props.source.uri}!`);
   };
 
   render = () => {
@@ -81,7 +77,6 @@ class Photo extends PureComponent {
             source={source}
             resizeMode='contain'
             resizeMethod='auto'
-            onLoad={this._onLoad}
             onError={this._onError}
           />
         </TouchableWithoutFeedback>
