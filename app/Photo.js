@@ -59,8 +59,8 @@ class Photo extends PureComponent {
     return (
       <View
         style={containerStyle}
-        focusable={true}
-        accessible={true}
+        focusable
+        accessible
         accessibilityLabel={`Poster ${index}`}
         accessibilityHint={title}
         accessibilityRole='image'

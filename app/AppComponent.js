@@ -3,6 +3,7 @@ import { AppState, FlatList, NativeModules, ScrollView } from 'react-native';
 import { connect } from 'react-redux';
 
 import Photo from './Photo';
+import Complex from './Complex';
 
 const { OrientationLock, AccessibilityInfo } = NativeModules;
 
@@ -76,20 +77,38 @@ class AppComponent extends PureComponent {
     );
   };
 
+  _renderComplex = (data) => {
+    return (
+      <Complex
+        style={styles.wideStyle}
+        firstButtonText={data.item.firstButtonText}
+        secondButtonText={data.item.secondButtonText}
+        activateText={data.item.activateText}
+        escapeText={data.item.escapeText}
+        index={data.index}
+      />
+    );
+  };
+
   render = () => {
     const { posters, landscapes, blurry } = this.props.photos;
+    const { complexes } = this.props.complexes;
 
     return (
       <ScrollView style={{ flex: 1 }}>
+        <FlatList horizontal keyExtractor={item => "" + item.id} data={complexes} renderItem={this._renderComplex}/>
         <FlatList horizontal keyExtractor={item => "" + item.id} data={posters} renderItem={this._renderPoster} />
         <FlatList horizontal keyExtractor={item => "" + item.id} data={landscapes} renderItem={this._renderLandscape} />
         <FlatList horizontal keyExtractor={item => "" + item.id} data={blurry} renderItem={this._renderBlurry} />
+        <FlatList horizontal keyExtractor={item => "" + item.id} data={complexes} renderItem={this._renderComplex} />
         <FlatList horizontal keyExtractor={item => "" + item.id} data={posters} renderItem={this._renderPoster} />
         <FlatList horizontal keyExtractor={item => "" + item.id} data={landscapes} renderItem={this._renderLandscape} />
         <FlatList horizontal keyExtractor={item => "" + item.id} data={blurry} renderItem={this._renderBlurry} />
+        <FlatList horizontal keyExtractor={item => "" + item.id} data={complexes} renderItem={this._renderComplex} />
         <FlatList horizontal keyExtractor={item => "" + item.id} data={posters} renderItem={this._renderPoster} />
         <FlatList horizontal keyExtractor={item => "" + item.id} data={landscapes} renderItem={this._renderLandscape} />
         <FlatList horizontal keyExtractor={item => "" + item.id} data={blurry} renderItem={this._renderBlurry} />
+        <FlatList horizontal keyExtractor={item => "" + item.id} data={complexes} renderItem={this._renderComplex} />
         <FlatList horizontal keyExtractor={item => "" + item.id} data={posters} renderItem={this._renderPoster} />
         <FlatList horizontal keyExtractor={item => "" + item.id} data={landscapes} renderItem={this._renderLandscape} />
         <FlatList horizontal keyExtractor={item => "" + item.id} data={blurry} renderItem={this._renderBlurry} />
@@ -114,9 +133,9 @@ const styles = {
 };
 
 const mapStateToProps = state => {
-  const { photos } = state;
+  const { photos, complexes } = state;
 
-  return { photos };
+  return { photos, complexes };
 };
 
 export default connect(mapStateToProps)(AppComponent);
