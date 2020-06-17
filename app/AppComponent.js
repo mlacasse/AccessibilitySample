@@ -1,12 +1,12 @@
-import React, { PureComponent, Fragment } from 'react';
-import { AppState, FlatList, NativeModules, ScrollView, Slider, Text, View } from 'react-native';
+import React, { Fragment, PureComponent } from 'react';
+import { FlatList, NativeModules, ScrollView, Slider, Text, View } from 'react-native';
 import { SpeechSynthesizer } from '@youi/react-native-youi';
 import { connect } from 'react-redux';
 
 import Photo from './Photo';
 import Complex from './Complex';
 
-const { OrientationLock, AccessibilityInfo } = NativeModules;
+const { OrientationLock } = NativeModules;
 
 class AppComponent extends PureComponent {
   constructor(props) {
@@ -23,20 +23,6 @@ class AppComponent extends PureComponent {
     OrientationLock.setRotationMode(6);
   }
 
-  componentDidMount() {
-    AppState.addEventListener('change', this._handleAppStateChange);
-
-    if (AccessibilityInfo) {
-      AccessibilityInfo.get()
-        .then(info => console.log('AccessibilityInfo', info))
-        .catch(err => console.trace(err));
-    }
-  }
-
-  componentWillUnmount() {
-    AppState.removeEventListener('change', this._handleAppStateChange);
-  }
-
   _onAccessibilityAction = (event) => {
     const { actionName } = event.nativeEvent;
 
@@ -49,14 +35,6 @@ class AppComponent extends PureComponent {
     };
 
     SpeechSynthesizer.speak(utterance);
-  };
-
-  _handleAppStateChange = (newAppState) => {
-    if (AccessibilityInfo && newAppState === 'active') {
-      AccessibilityInfo.get()
-        .then(info => console.log('AppState', newAppState, 'AccessibilityInfo', info))
-        .catch(err => console.trace(err));
-    }
   };
 
   _renderBlurry = (data) => {
@@ -134,7 +112,10 @@ class AppComponent extends PureComponent {
             step={1}
           />
         </View>
-        <ScrollView style={{ flex: 1 }}>
+        <ScrollView
+          ref={this.listRef}
+          style={{ flex: 1 }}
+        >
           <FlatList horizontal keyExtractor={item => "" + item.id} data={complexes} renderItem={this._renderComplex} />
           <FlatList horizontal keyExtractor={item => "" + item.id} data={posters} renderItem={this._renderPoster} />
           <FlatList horizontal keyExtractor={item => "" + item.id} data={landscapes} renderItem={this._renderLandscape} />

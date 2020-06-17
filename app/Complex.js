@@ -63,7 +63,6 @@ class Complex extends PureComponent {
         style={containerStyle}
         accessible={!focused}
         accessibilityLabel={`Complex ${index}`}
-        onAccessibilityEscape={this._onAccessibilityEscape}
         onAccessibilityTap={this._onAccessibilityTap}
       >
         <TouchableWithoutFeedback onPress={this.onPress}>
@@ -79,16 +78,24 @@ class Complex extends PureComponent {
             </Text>
           </View>
         </TouchableWithoutFeedback>
-        <Text accessible={focused} style={textStyle}>
+        <Text
+          accessible={focused}
+          onAccessibilityEscape={this._onAccessibilityEscape}
+          style={textStyle}
+        >
           {`Complex ${index}`}
         </Text>
-        <Text accessible={focused} style={smallTextStyle}>
+        <Text
+          accessible={focused}
+          onAccessibilityEscape={this._onAccessibilityEscape}
+          style={smallTextStyle}
+        >
           {focused ? escapeText : activateText}
         </Text>
         <TouchableWithoutFeedback onPress={this.onPress}>
           <View
             accessible={focused}
-            onAccessibilityEscape={this._onAccessibilityEscape}       
+            onAccessibilityEscape={this._onAccessibilityEscape}
             onAccessibilityTap={this._onPress}     
             style={{ padding: 5, backgroundColor: 'green' }}
           >
