@@ -56,16 +56,20 @@ class Photo extends PureComponent {
       borderColor: this.state.focused ? 'white' : 'black',
     };
 
+    const accessibilityProps = {
+      accessible: true,
+      accessibilityLabel: `Poster ${index} ${title}`,
+      accessibilityHint: this.props.accessibilityHint ? this.props.accessibilityHint : null,
+      accessibilityRole: 'image',
+      accessibilityActions: [{ name: 'activate' }, { name: 'escape' }, { name: 'magicTap' }],
+      onAccessibilityAction: this._onAccessibilityAction,
+    };
+
     return (
       <View
         style={containerStyle}
         focusable
-        accessible
-        accessibilityLabel={`Poster ${index}`}
-        accessibilityHint={title}
-        accessibilityRole='image'
-        accessibilityActions={[{ name: 'activate' }, { name: 'escape' }, { name: 'magicTap' }]}
-        onAccessibilityAction={this._onAccessibilityAction}
+        {...accessibilityProps}
       >
         <TouchableWithoutFeedback
           onFocus={this._onFocus}

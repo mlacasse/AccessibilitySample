@@ -38,39 +38,50 @@ class AppComponent extends PureComponent {
   };
 
   _renderBlurry = (data) => {
+    const { blurry } = this.props.photos;
+
     return (
       <Photo
         style={styles.wideStyle}
         source={{ uri: data.item.uri }}
         title={data.item.title}
         index={data.index}
+        accessibilityHint={`Item ${data.index + 1} of ${blurry.length} in Blurry.`}
       />
     );
   };
 
   _renderLandscape = (data) => {
+    const { landscapes } = this.props.photos;
+
     return (
       <Photo
         style={styles.photoStyle}
         source={{ uri: data.item.uri }}
         title={data.item.title}
         index={data.index}
+        accessibilityHint={`Item ${data.index + 1} of ${landscapes.length} in Landscapes.`}
       />
     );
   };
 
   _renderPoster = (data) => {
+    const { posters } = this.props.photos;
+
     return (
       <Photo
         style={styles.posterStyle}
         source={{ uri: data.item.uri }}
         title={data.item.title}
         index={data.index}
+        accessibilityHint={`Item ${data.index + 1} of ${posters.length} in Posters.`}
       />
     );
   };
 
   _renderComplex = (data) => {
+    const { complexes } = this.props.complexes;
+
     return (
       <Complex
         style={styles.wideStyle}
@@ -79,6 +90,7 @@ class AppComponent extends PureComponent {
         activateText={data.item.activateText}
         escapeText={data.item.escapeText}
         index={data.index}
+        accessibilityHint={`Item ${data.index + 1} of ${complexes.length} in Complexes.`}
       />
     );
   };

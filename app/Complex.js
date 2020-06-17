@@ -57,13 +57,18 @@ class Complex extends PureComponent {
     const textStyle = { fontSize: 12, color: 'white' };
     const smallTextStyle = { fontSize: 8, color: 'white' };
 
+    const accessibilityProps = {
+      accessible: !focused,
+      accessibilityLabel: `Complex ${index}`,
+      accessibilityHint: this.props.accessibilityHint ? this.props.accessibilityHint : null,
+      onAccessibilityTap: this._onAccessibilityTap,
+    };
+
     return (
       <View
         ref={this.veiwRef}
         style={containerStyle}
-        accessible={!focused}
-        accessibilityLabel={`Complex ${index}`}
-        onAccessibilityTap={this._onAccessibilityTap}
+        {...accessibilityProps}
       >
         <TouchableWithoutFeedback onPress={this.onPress}>
           <View
