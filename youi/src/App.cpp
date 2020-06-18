@@ -4,7 +4,9 @@
 #include <JSBundlingStrings.h>
 #include <automation/YiWebDriverLocator.h>
 #include <cxxreact/JSBigString.h>
+#include <debug/YiDevPanel.h>
 #include <glog/logging.h>
+#include <youireact/debug/ReactJsDebugWidget.h>
 
 App::App() = default;
 
@@ -80,7 +82,15 @@ bool App::UserInit()
     std::unique_ptr<JsBundleLoader> pBundleLoader(GetBundler());
 
     PlatformApp::SetJsBundleLoader(std::move(pBundleLoader));
-    return PlatformApp::UserInit();
+    
+    bool bOK = PlatformApp::UserInit();
+
+#if YI_DEBUG
+    // explicitly enable remote JS debugging
+    GetBridge().SetRemoteDebuggingEnabled(true);
+#endif
+
+    return bOK;
 }
 
 bool App::UserStart()

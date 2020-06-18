@@ -31,7 +31,7 @@ class Complex extends PureComponent {
   };
 
   _onPress = () => {
-    SpeechSynthesizer.speak(`Complex ${this.props.index} pressed`);
+    SpeechSynthesizer.speak(`${this.props.title} pressed`);
   };
 
   _onFocus = () => {
@@ -43,7 +43,7 @@ class Complex extends PureComponent {
   };
 
   render = () => {
-    const { index, firstButtonText, secondButtonText, style, activateText, escapeText } = this.props;
+    const { title, firstButtonText, secondButtonText, style, activateText, escapeText } = this.props;
 
     const { focused } = this.state;
 
@@ -59,7 +59,7 @@ class Complex extends PureComponent {
 
     const accessibilityProps = {
       accessible: !focused,
-      accessibilityLabel: `Complex ${index}`,
+      accessibilityLabel: `${title}`,
       accessibilityHint: this.props.accessibilityHint ? this.props.accessibilityHint : null,
       onAccessibilityTap: this._onAccessibilityTap,
     };
@@ -88,7 +88,7 @@ class Complex extends PureComponent {
           onAccessibilityEscape={this._onAccessibilityEscape}
           style={textStyle}
         >
-          {`Complex ${index}`}
+          {`${title}`}
         </Text>
         <Text
           accessible={focused}

@@ -1,16 +1,25 @@
-import React, { Fragment, PureComponent } from 'react';
-import { FlatList, NativeModules, ScrollView, Slider, Text, View } from 'react-native';
+import React, { PureComponent } from 'react';
+import { AppState, AccessibilityInfo, NativeModules, ScrollView, Slider, Text, View } from 'react-native';
 import { SpeechSynthesizer } from '@youi/react-native-youi';
 import { connect } from 'react-redux';
 
 import Photo from './Photo';
 import Complex from './Complex';
+import AccessibleHorizontalList from './AccessibileHorizontalList';
 
 const { OrientationLock } = NativeModules;
 
 class AppComponent extends PureComponent {
   constructor(props) {
     super(props);
+
+    this.state = {
+      accessible: false,
+      minimumValue: 0,
+      maximumValue: 100,
+      step: 5,
+      value: 50,
+    };
 
     // 0 = Landscape
     // 1 = Portrait
@@ -23,12 +32,54 @@ class AppComponent extends PureComponent {
     OrientationLock.setRotationMode(6);
   }
 
+  componentDidMount() {
+    AppState.addEventListener('change', this._onAppStateChange);
+
+    AccessibilityInfo.fetch()
+      .then(state => {
+        this.setState({ accessible: state });
+      })
+      .catch(() =>{
+        this.setState({ accessible: false });
+      });
+  }
+
+  componentWillUnmount() {
+    AppState.removeEventListener('change', this._onAppStateChange);
+  }
+
+  _onAppStateChange = (newAppState) => {
+    if (newAppState === 'active') {
+      AccessibilityInfo.fetch()
+        .then(state => {
+          this.setState({ accessible: state })
+        })
+        .catch(() => {
+          this.setState({ accessible: false })
+        });
+    }
+  };
+
   _onAccessibilityAction = (event) => {
     const { actionName } = event.nativeEvent;
+
+    const { maximumValue, minimumValue, step, value } = this.state;
 
     let utterance = '';
 
     switch(actionName) {
+      case 'increment':
+        if (value < maximumValue) {
+          this.setState({ value: value + step });
+          utterance = `${value + step}`;
+        }
+        break;
+      case 'decrement':
+        if (value > minimumValue) {
+          this.setState({ value: value - step });
+          utterance = `${value - step}`;
+        }
+        break;
       default:
         utterance = `Accessibility action ${actionName}`;
         break;
@@ -38,50 +89,39 @@ class AppComponent extends PureComponent {
   };
 
   _renderBlurry = (data) => {
-    const { blurry } = this.props.photos;
-
     return (
       <Photo
         style={styles.wideStyle}
         source={{ uri: data.item.uri }}
         title={data.item.title}
         index={data.index}
-        accessibilityHint={`Item ${data.index + 1} of ${blurry.length} in Blurry.`}
       />
     );
   };
 
   _renderLandscape = (data) => {
-    const { landscapes } = this.props.photos;
-
     return (
       <Photo
         style={styles.photoStyle}
         source={{ uri: data.item.uri }}
         title={data.item.title}
         index={data.index}
-        accessibilityHint={`Item ${data.index + 1} of ${landscapes.length} in Landscapes.`}
       />
     );
   };
 
   _renderPoster = (data) => {
-    const { posters } = this.props.photos;
-
     return (
       <Photo
         style={styles.posterStyle}
         source={{ uri: data.item.uri }}
         title={data.item.title}
         index={data.index}
-        accessibilityHint={`Item ${data.index + 1} of ${posters.length} in Posters.`}
       />
     );
   };
 
   _renderComplex = (data) => {
-    const { complexes } = this.props.complexes;
-
     return (
       <Complex
         style={styles.wideStyle}
@@ -89,24 +129,31 @@ class AppComponent extends PureComponent {
         secondButtonText={data.item.secondButtonText}
         activateText={data.item.activateText}
         escapeText={data.item.escapeText}
-        index={data.index}
-        accessibilityHint={`Item ${data.index + 1} of ${complexes.length} in Complexes.`}
+        title={data.item.title}
       />
     );
   };
 
   render = () => {
+    const { maximumValue, minimumValue, step, value } = this.state;
+
     const { posters, landscapes, blurry } = this.props.photos;
     const { complexes } = this.props.complexes;
 
+    const accessibilityText = this.state.accessible ? 'accessibility enabled' : 'accessibility disabled';
+
     return (
-      <Fragment>
+      <ScrollView
+        ref={this.listRef}
+        style={{ flex: 1 }}
+      >
         <View style={{
           alignItems: 'center',
           padding: 5,
           backgroundColor: 'white',
         }}>
           <Text style={{ fontSize: 14, color: 'black' }}>Accessibility Sample</Text>
+          <Text style={{ fontSize: 8, color: 'black' }}>{accessibilityText}</Text>
         </View>
         <View style={{
           alignItems: 'center',
@@ -115,37 +162,30 @@ class AppComponent extends PureComponent {
         }}>
           <Slider
             accessible
-            accessibilityLabel={'This is a slider '}
+            accessibilityLabel={'Slider '}
             accessibilityRole={'adjustable'}
+            accessibilityHint={`${value}`}
             accessibilityActions={[{ name: 'increment' }, { name: 'decrement' }]}
             onAccessibilityAction={this._onAccessibilityAction}
-            maximumValue={100}
-            value={50}
-            step={1}
+            maximumValue={maximumValue}
+            minimumValue={minimumValue}
+            value={value}
+            step={step}
           />
         </View>
-        <ScrollView
-          ref={this.listRef}
-          style={{ flex: 1 }}
-        >
-          <FlatList horizontal keyExtractor={item => "" + item.id} data={complexes} renderItem={this._renderComplex} />
-          <FlatList horizontal keyExtractor={item => "" + item.id} data={posters} renderItem={this._renderPoster} />
-          <FlatList horizontal keyExtractor={item => "" + item.id} data={landscapes} renderItem={this._renderLandscape} />
-          <FlatList horizontal keyExtractor={item => "" + item.id} data={blurry} renderItem={this._renderBlurry} />
-          <FlatList horizontal keyExtractor={item => "" + item.id} data={complexes} renderItem={this._renderComplex} />
-          <FlatList horizontal keyExtractor={item => "" + item.id} data={posters} renderItem={this._renderPoster} />
-          <FlatList horizontal keyExtractor={item => "" + item.id} data={landscapes} renderItem={this._renderLandscape} />
-          <FlatList horizontal keyExtractor={item => "" + item.id} data={blurry} renderItem={this._renderBlurry} />
-          <FlatList horizontal keyExtractor={item => "" + item.id} data={complexes} renderItem={this._renderComplex} />
-          <FlatList horizontal keyExtractor={item => "" + item.id} data={posters} renderItem={this._renderPoster} />
-          <FlatList horizontal keyExtractor={item => "" + item.id} data={landscapes} renderItem={this._renderLandscape} />
-          <FlatList horizontal keyExtractor={item => "" + item.id} data={blurry} renderItem={this._renderBlurry} />
-          <FlatList horizontal keyExtractor={item => "" + item.id} data={complexes} renderItem={this._renderComplex} />
-          <FlatList horizontal keyExtractor={item => "" + item.id} data={posters} renderItem={this._renderPoster} />
-          <FlatList horizontal keyExtractor={item => "" + item.id} data={landscapes} renderItem={this._renderLandscape} />
-          <FlatList horizontal keyExtractor={item => "" + item.id} data={blurry} renderItem={this._renderBlurry} />
-        </ScrollView>
-      </Fragment>
+        <AccessibleHorizontalList accessibilityLabel={'Complex List '} data={complexes} renderItem={this._renderComplex} />
+        <AccessibleHorizontalList accessibilityLabel={'Poster List '} data={posters} renderItem={this._renderPoster} />
+        <AccessibleHorizontalList accessibilityLabel={'Landscape List '} data={landscapes} renderItem={this._renderLandscape} />
+        <AccessibleHorizontalList accessibilityLabel={'Blurry List '} data={blurry} renderItem={this._renderBlurry} />
+        <AccessibleHorizontalList accessibilityLabel={'Complex List '} data={complexes} renderItem={this._renderComplex} />
+        <AccessibleHorizontalList accessibilityLabel={'Poster List '} data={posters} renderItem={this._renderPoster} />
+        <AccessibleHorizontalList accessibilityLabel={'Landscape List '} data={landscapes} renderItem={this._renderLandscape} />
+        <AccessibleHorizontalList accessibilityLabel={'Blurry List '} data={blurry} renderItem={this._renderBlurry} />
+        <AccessibleHorizontalList accessibilityLabel={'Complex List '} data={complexes} renderItem={this._renderComplex} />
+        <AccessibleHorizontalList accessibilityLabel={'Poster List '} data={posters} renderItem={this._renderPoster} />
+        <AccessibleHorizontalList accessibilityLabel={'Landscape List '} data={landscapes} renderItem={this._renderLandscape} />
+        <AccessibleHorizontalList accessibilityLabel={'Blurry List '} data={blurry} renderItem={this._renderBlurry} />
+      </ScrollView>
     );
   };
 };
