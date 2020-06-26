@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { AccessibilityInfo, Text, View, TouchableWithoutFeedback, findNodeHandle } from 'react-native';
-import { SpeechSynthesizer } from '@youi/react-native-youi';
+import { FormFactor, SpeechSynthesizer } from '@youi/react-native-youi';
 
 class Complex extends PureComponent {
   constructor(props) {
@@ -51,11 +51,11 @@ class Complex extends PureComponent {
       ...style,
       flexDirection: 'column',
       justifyContent: 'space-between',
-      alignItems: 'center'
+      alignItems: 'center',
     };
 
-    const textStyle = { fontSize: 12, color: 'white' };
-    const smallTextStyle = { fontSize: 8, color: 'white' };
+    const textStyle = { fontSize: FormFactor.isTV ? 28 : 12, color: 'white' };
+    const smallTextStyle = { fontSize: FormFactor.isTV ? 18 : 8, color: 'white' };
 
     const accessibilityProps = {
       accessible: !focused,

@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { AppState, AccessibilityInfo, NativeModules, ScrollView, Slider, Text, View } from 'react-native';
-import { SpeechSynthesizer } from '@youi/react-native-youi';
+import { FormFactor, SpeechSynthesizer } from '@youi/react-native-youi';
 import { connect } from 'react-redux';
 
 import Photo from './Photo';
@@ -152,12 +152,12 @@ class AppComponent extends PureComponent {
           padding: 5,
           backgroundColor: 'white',
         }}>
-          <Text style={{ fontSize: 14, color: 'black' }}>Accessibility Sample</Text>
-          <Text style={{ fontSize: 8, color: 'black' }}>{accessibilityText}</Text>
+          <Text style={{ fontSize: FormFactor.isTV ? 60 : 14, color: 'black' }}>Accessibility Sample</Text>
+          <Text style={{ fontSize: FormFactor.isTV ? 40 : 8, color: 'black' }}>{accessibilityText}</Text>
         </View>
         <View style={{
           alignItems: 'center',
-          padding: 5,
+          padding: FormFactor.isTV ? 25 : 5,
           backgroundColor: 'white',
         }}>
           <Slider
@@ -192,16 +192,16 @@ class AppComponent extends PureComponent {
 
 const styles = {
   photoStyle: {
-    width: 98,
-    height: 74,
+    width: FormFactor.isTV ? 490: 98,
+    height: FormFactor.isTV ? 370: 74,
   },
   posterStyle: {
-    width: 50,
-    height: 75,
+    width: FormFactor.isTV ? 250 : 50,
+    height: FormFactor.isTV ? 375: 75,
   },
   wideStyle: {
-    width: 160,
-    height: 90,
+    width: FormFactor.isTV ? 400 : 160,
+    height: FormFactor.isTV ? 225 : 90,
   },
 };
 
