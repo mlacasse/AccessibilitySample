@@ -250,6 +250,9 @@ yi_configure_js_bundling(PROJECT_TARGET ${PROJECT_NAME} BASE_OUTPUT_DIR ${YI_BAS
 
 # === END OF COMPILER SETUP ===================================================
 
+include(Modules/YiConfigureLogging)
+yi_configure_logging(TARGET ${PROJECT_NAME})
+
 # === START OF ASSET COPYING ==================================================
 include(Modules/YiConfigureAssetCopying)
 yi_configure_asset_copying(PROJECT_TARGET ${PROJECT_NAME}
