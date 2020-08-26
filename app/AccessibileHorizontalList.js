@@ -1,6 +1,5 @@
 import React, { PureComponent, createRef } from 'react';
-import { FlatList, View } from 'react-native';
-import { SpeechSynthesizer } from '@youi/react-native-youi';
+import { AccessibilityInfo, FlatList, View } from 'react-native';
 
 class AccessibileHorizontalList extends PureComponent {
   constructor(props) {
@@ -26,7 +25,7 @@ class AccessibileHorizontalList extends PureComponent {
         this.listRef.current.scrollToIndex({ index });
       }
 
-      SpeechSynthesizer.speak(utterance);
+      AccessibilityInfo.announceForAccessibility(utterance);
 
       return { index }
     });
@@ -45,7 +44,7 @@ class AccessibileHorizontalList extends PureComponent {
         this.listRef.current.scrollToIndex({ index });
       }
 
-      SpeechSynthesizer.speak(utterance);
+      AccessibilityInfo.announceForAccessibility(utterance);
 
       return { index }
     });
@@ -62,7 +61,7 @@ class AccessibileHorizontalList extends PureComponent {
         this._decrementIndex();
         break;
       default:
-        SpeechSynthesizer.speak(`${actionName}`);
+        AccessibilityInfo.announceForAccessibility(`${actionName}`);
         break;
     };
   };

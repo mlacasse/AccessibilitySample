@@ -1,6 +1,6 @@
-import React, { PureComponent } from 'react';
-import { AppState, AccessibilityInfo, NativeModules, ScrollView, Slider, Text, View } from 'react-native';
-import { FormFactor, SpeechSynthesizer } from '@youi/react-native-youi';
+import React, { PureComponent, createRef } from 'react';
+import { AccessibilityInfo, NativeModules, ScrollView, Slider, Text, View, findNodeHandle } from 'react-native';
+import { FormFactor } from '@youi/react-native-youi';
 import { connect } from 'react-redux';
 
 import Photo from './Photo';
@@ -33,32 +33,16 @@ class AppComponent extends PureComponent {
   }
 
   componentDidMount() {
-    AppState.addEventListener('change', this._onAppStateChange);
+    AccessibilityInfo.addEventListener('change', (accessible) => this.setState({ accessible }));
+    AccessibilityInfo.fetch().then((accessible) => this.setState({ accessible }));
 
-    AccessibilityInfo.fetch()
-      .then(state => {
-        this.setState({ accessible: state });
-      })
-      .catch(() =>{
-        this.setState({ accessible: false });
-      });
+    // Reset accessibility focus
+    AccessibilityInfo.setAccessibilityFocus(undefined);
   }
 
   componentWillUnmount() {
-    AppState.removeEventListener('change', this._onAppStateChange);
+    AccessibilityInfo.removeEventListener('change', (accessible) => this.setState({ accessible }));
   }
-
-  _onAppStateChange = (newAppState) => {
-    if (newAppState === 'active') {
-      AccessibilityInfo.fetch()
-        .then(state => {
-          this.setState({ accessible: state })
-        })
-        .catch(() => {
-          this.setState({ accessible: false })
-        });
-    }
-  };
 
   _onAccessibilityAction = (event) => {
     const { actionName } = event.nativeEvent;
@@ -85,7 +69,7 @@ class AppComponent extends PureComponent {
         break;
     };
 
-    SpeechSynthesizer.speak(utterance);
+    AccessibilityInfo.announceForAccessibility(utterance);
   };
 
   _renderBlurry = (data) => {
@@ -143,10 +127,7 @@ class AppComponent extends PureComponent {
     const accessibilityText = this.state.accessible ? 'accessibility enabled' : 'accessibility disabled';
 
     return (
-      <ScrollView
-        ref={this.listRef}
-        style={{ flex: 1 }}
-      >
+      <ScrollView style={{ flex: 1 }}>
         <View style={{
           alignItems: 'center',
           padding: 5,

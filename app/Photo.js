@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 import { Image, TouchableWithoutFeedback, View, AccessibilityInfo } from 'react-native';
-import { SpeechSynthesizer } from '@youi/react-native-youi';
 
 class Photo extends PureComponent {
   constructor(props) {
@@ -28,7 +27,7 @@ class Photo extends PureComponent {
         break;
     };
 
-    SpeechSynthesizer.speak(utterance);
+    AccessibilityInfo.announceForAccessibility(utterance);
   };
 
   _onPress = () => {

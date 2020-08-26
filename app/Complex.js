@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { AccessibilityInfo, Text, View, TouchableWithoutFeedback, findNodeHandle } from 'react-native';
-import { FormFactor, SpeechSynthesizer } from '@youi/react-native-youi';
+import { FormFactor } from '@youi/react-native-youi';
 
 class Complex extends PureComponent {
   constructor(props) {
@@ -31,7 +31,7 @@ class Complex extends PureComponent {
   };
 
   _onPress = () => {
-    SpeechSynthesizer.speak(`${this.props.title} pressed`);
+    AccessibilityInfo.announceForAccessibility(`${this.props.title} pressed`);
   };
 
   _onFocus = () => {
