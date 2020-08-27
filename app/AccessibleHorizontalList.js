@@ -1,7 +1,7 @@
 import React, { PureComponent, createRef } from 'react';
 import { AccessibilityInfo, FlatList, View } from 'react-native';
 
-class AccessibileHorizontalList extends PureComponent {
+class AccessibleHorizontalList extends PureComponent {
   constructor(props) {
     super(props);
 
@@ -98,4 +98,4 @@ class AccessibileHorizontalList extends PureComponent {
   }
 }
 
-export default AccessibileHorizontalList;
+export default AccessibleHorizontalList;

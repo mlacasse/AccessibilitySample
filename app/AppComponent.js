@@ -1,11 +1,11 @@
-import React, { PureComponent, createRef } from 'react';
-import { AccessibilityInfo, NativeModules, ScrollView, Slider, Text, View, findNodeHandle } from 'react-native';
+import React, { PureComponent } from 'react';
+import { AccessibilityInfo, Button, NativeModules, ScrollView, Slider, Text, View } from 'react-native';
 import { FormFactor } from '@youi/react-native-youi';
 import { connect } from 'react-redux';
 
 import Photo from './Photo';
 import Complex from './Complex';
-import AccessibleHorizontalList from './AccessibileHorizontalList';
+import AccessibleHorizontalList from './AccessibleHorizontalList';
 
 const { OrientationLock } = NativeModules;
 
@@ -127,7 +127,7 @@ class AppComponent extends PureComponent {
     const accessibilityText = this.state.accessible ? 'accessibility enabled' : 'accessibility disabled';
 
     return (
-      <ScrollView style={{ flex: 1 }}>
+      <View style={{ flex: 1 }}>
         <View style={{
           alignItems: 'center',
           padding: 5,
@@ -145,7 +145,7 @@ class AppComponent extends PureComponent {
             accessible
             accessibilityLabel={'Slider '}
             accessibilityRole={'adjustable'}
-            accessibilityHint={`${value}`}
+            accessibilityHint={`${value}`}  
             accessibilityActions={[{ name: 'increment' }, { name: 'decrement' }]}
             onAccessibilityAction={this._onAccessibilityAction}
             maximumValue={maximumValue}
@@ -154,19 +154,45 @@ class AppComponent extends PureComponent {
             step={step}
           />
         </View>
-        <AccessibleHorizontalList accessibilityLabel={'Complex List '} data={complexes} renderItem={this._renderComplex} />
-        <AccessibleHorizontalList accessibilityLabel={'Poster List '} data={posters} renderItem={this._renderPoster} />
-        <AccessibleHorizontalList accessibilityLabel={'Landscape List '} data={landscapes} renderItem={this._renderLandscape} />
-        <AccessibleHorizontalList accessibilityLabel={'Blurry List '} data={blurry} renderItem={this._renderBlurry} />
-        <AccessibleHorizontalList accessibilityLabel={'Complex List '} data={complexes} renderItem={this._renderComplex} />
-        <AccessibleHorizontalList accessibilityLabel={'Poster List '} data={posters} renderItem={this._renderPoster} />
-        <AccessibleHorizontalList accessibilityLabel={'Landscape List '} data={landscapes} renderItem={this._renderLandscape} />
-        <AccessibleHorizontalList accessibilityLabel={'Blurry List '} data={blurry} renderItem={this._renderBlurry} />
-        <AccessibleHorizontalList accessibilityLabel={'Complex List '} data={complexes} renderItem={this._renderComplex} />
-        <AccessibleHorizontalList accessibilityLabel={'Poster List '} data={posters} renderItem={this._renderPoster} />
-        <AccessibleHorizontalList accessibilityLabel={'Landscape List '} data={landscapes} renderItem={this._renderLandscape} />
-        <AccessibleHorizontalList accessibilityLabel={'Blurry List '} data={blurry} renderItem={this._renderBlurry} />
-      </ScrollView>
+        <View style={{ flex: 1 }}>
+          <ScrollView>
+            <AccessibleHorizontalList accessibilityLabel={'Complex List '} data={complexes} renderItem={this._renderComplex} />
+            <AccessibleHorizontalList accessibilityLabel={'Poster List '} data={posters} renderItem={this._renderPoster} />
+            <AccessibleHorizontalList accessibilityLabel={'Landscape List '} data={landscapes} renderItem={this._renderLandscape} />
+            <AccessibleHorizontalList accessibilityLabel={'Blurry List '} data={blurry} renderItem={this._renderBlurry} />
+            <AccessibleHorizontalList accessibilityLabel={'Complex List '} data={complexes} renderItem={this._renderComplex} />
+            <AccessibleHorizontalList accessibilityLabel={'Poster List '} data={posters} renderItem={this._renderPoster} />
+            <AccessibleHorizontalList accessibilityLabel={'Landscape List '} data={landscapes} renderItem={this._renderLandscape} />
+            <AccessibleHorizontalList accessibilityLabel={'Blurry List '} data={blurry} renderItem={this._renderBlurry} />
+            <AccessibleHorizontalList accessibilityLabel={'Complex List '} data={complexes} renderItem={this._renderComplex} />
+            <AccessibleHorizontalList accessibilityLabel={'Poster List '} data={posters} renderItem={this._renderPoster} />
+            <AccessibleHorizontalList accessibilityLabel={'Landscape List '} data={landscapes} renderItem={this._renderLandscape} />
+            <AccessibleHorizontalList accessibilityLabel={'Blurry List '} data={blurry} renderItem={this._renderBlurry} />
+          </ScrollView>
+        </View>
+        <View style={{
+          flexDirection: 'row',
+          justifyContent: 'center',
+          padding: FormFactor.isTV ? 25 : 5,
+          backgroundColor: 'white',
+        }}>
+          <Button
+            title={'1'}
+            onPress={() => {AccessibilityInfo.announceForAccessibility('Button 1 was tapped')}}
+            accessibilityLabel={'1'}
+          />
+          <Button
+            title={'2'}
+            onPress={() => {AccessibilityInfo.announceForAccessibility('Button 2 was tapped')}}
+            accessibilityLabel={'2'}
+          />
+          <Button
+            title={'3'}  
+            onPress={() => {AccessibilityInfo.announceForAccessibility('Button 3 was tapped')}}
+            accessibilityLabel={'3'}
+          />
+        </View>
+      </View>
     );
   };
 };
