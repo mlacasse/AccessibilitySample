@@ -903,10 +903,10 @@
   dependencies:
     "@types/yargs-parser" "*"
 
-"@youi/react-native-youi@5.18.0":
-  version "5.18.0"
-  resolved "https://youi.jfrog.io/youi/api/npm/jspkg/@youi/react-native-youi/-/@youi/react-native-youi-5.18.0.tgz#f4c8cb84df1e4e842c78168ba0aa8d973c458f2f"
-  integrity sha1-9MjLhN8eToQseBaLoKqNlzxFjy8=
+"@youi/react-native-youi@5.18.0-att.cr1":
+  version "5.18.0-att.cr1"
+  resolved "https://youi.jfrog.io/youi/api/npm/jspkg/@youi/react-native-youi/-/@youi/react-native-youi-5.18.0-att.cr1.tgz#4cb5d013afc0c7b8106c0c8aa395299b03a135d6"
+  integrity sha1-TLXQE6/Ax7gQbAyKo5UpmwOhNdY=
   dependencies:
     "@babel/core" "7.0.0"
     create-react-class "^15.6.3"
@@ -5268,6 +5268,11 @@ preserve@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/preserve/-/preserve-0.2.0.tgz#815ed1f6ebc65926f865b310c0713bcb3315ce4b"
   integrity sha1-gV7R9uvGWSb4ZbMQwHE7yzMVzks=
+
+prettier@^2.1.1:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.1.1.tgz#d9485dd5e499daa6cb547023b87a6cf51bee37d6"
+  integrity sha512-9bY+5ZWCfqj3ghYBLxApy2zf6m+NJo5GzmLTpr9FsApsfjriNnS2dahWReHMi7qNPhhHl9SYHJs2cHZLgexNIw==
 
 pretty-format@24.0.0-alpha.6:
   version "24.0.0-alpha.6"

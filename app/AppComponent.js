@@ -1,13 +1,36 @@
-import React, { PureComponent } from 'react';
-import { AccessibilityInfo, Button, NativeModules, ScrollView, Slider, Text, View } from 'react-native';
-import { FormFactor } from '@youi/react-native-youi';
-import { connect } from 'react-redux';
+import React, { PureComponent } from "react";
+import {
+  AccessibilityInfo,
+  Button,
+  NativeModules,
+  ScrollView,
+  FlatList,
+  Slider,
+  Text,
+  View,
+} from "react-native";
+import { FormFactor } from "@youi/react-native-youi";
+import { connect } from "react-redux";
 
-import Photo from './Photo';
-import Complex from './Complex';
-import AccessibleHorizontalList from './AccessibleHorizontalList';
+import Photo from "./Photo";
+import Complex from "./Complex";
+import AccessibleHorizontalList from "./AccessibleHorizontalList";
 
 const { OrientationLock } = NativeModules;
+
+const items = [
+  { title: "A List" },
+  { title: "B List" },
+  { title: "C List" },
+  { title: "D List" },
+  { title: "E List" },
+  { title: "F List" },
+  { title: "G List" },
+  { title: "H List" },
+  { title: "I List" },
+  { title: "J List" },
+  { title: "K List" },
+];
 
 class AppComponent extends PureComponent {
   constructor(props) {
@@ -19,6 +42,7 @@ class AppComponent extends PureComponent {
       maximumValue: 100,
       step: 5,
       value: 50,
+      lists: [],
     };
 
     // 0 = Landscape
@@ -33,15 +57,25 @@ class AppComponent extends PureComponent {
   }
 
   componentDidMount() {
-    AccessibilityInfo.addEventListener('change', (accessible) => this.setState({ accessible }));
-    AccessibilityInfo.fetch().then((accessible) => this.setState({ accessible }));
+    AccessibilityInfo.addEventListener("change", (accessible) =>
+      this.setState({ accessible })
+    );
+    AccessibilityInfo.fetch().then((accessible) =>
+      this.setState({ accessible })
+    );
 
     // Reset accessibility focus
     AccessibilityInfo.setAccessibilityFocus(undefined);
+
+    setTimeout(() => {
+      this.setState({ lists: items });
+    }, 2000);
   }
 
   componentWillUnmount() {
-    AccessibilityInfo.removeEventListener('change', (accessible) => this.setState({ accessible }));
+    AccessibilityInfo.removeEventListener("change", (accessible) =>
+      this.setState({ accessible })
+    );
   }
 
   _onAccessibilityAction = (event) => {
@@ -49,16 +83,16 @@ class AppComponent extends PureComponent {
 
     const { maximumValue, minimumValue, step, value } = this.state;
 
-    let utterance = '';
+    let utterance = "";
 
-    switch(actionName) {
-      case 'increment':
+    switch (actionName) {
+      case "increment":
         if (value < maximumValue) {
           this.setState({ value: value + step });
           utterance = `${value + step}`;
         }
         break;
-      case 'decrement':
+      case "decrement":
         if (value > minimumValue) {
           this.setState({ value: value - step });
           utterance = `${value - step}`;
@@ -67,7 +101,7 @@ class AppComponent extends PureComponent {
       default:
         utterance = `Accessibility action ${actionName}`;
         break;
-    };
+    }
 
     AccessibilityInfo.announceForAccessibility(utterance);
   };
@@ -124,29 +158,42 @@ class AppComponent extends PureComponent {
     const { posters, landscapes, blurry } = this.props.photos;
     const { complexes } = this.props.complexes;
 
-    const accessibilityText = this.state.accessible ? 'accessibility enabled' : 'accessibility disabled';
+    const accessibilityText = this.state.accessible
+      ? "accessibility enabled"
+      : "accessibility disabled";
 
     return (
       <View style={{ flex: 1 }}>
-        <View style={{
-          alignItems: 'center',
-          padding: 5,
-          backgroundColor: 'white',
-        }}>
-          <Text style={{ fontSize: FormFactor.isTV ? 60 : 14, color: 'black' }}>Accessibility Sample</Text>
-          <Text style={{ fontSize: FormFactor.isTV ? 40 : 8, color: 'black' }}>{accessibilityText}</Text>
+        <View
+          style={{
+            alignItems: "center",
+            padding: 5,
+            backgroundColor: "white",
+          }}
+        >
+          <Text style={{ fontSize: FormFactor.isTV ? 60 : 14, color: "black" }}>
+            Accessibility Sample
+          </Text>
+          <Text style={{ fontSize: FormFactor.isTV ? 40 : 8, color: "black" }}>
+            {accessibilityText}
+          </Text>
         </View>
-        <View style={{
-          alignItems: 'center',
-          padding: FormFactor.isTV ? 25 : 5,
-          backgroundColor: 'white',
-        }}>
+        <View
+          style={{
+            alignItems: "center",
+            padding: FormFactor.isTV ? 25 : 5,
+            backgroundColor: "white",
+          }}
+        >
           <Slider
             accessible
-            accessibilityLabel={'Slider '}
-            accessibilityRole={'adjustable'}
-            accessibilityHint={`${value}`}  
-            accessibilityActions={[{ name: 'increment' }, { name: 'decrement' }]}
+            accessibilityLabel={"Slider "}
+            accessibilityRole={"adjustable"}
+            accessibilityHint={`${value}`}
+            accessibilityActions={[
+              { name: "increment" },
+              { name: "decrement" },
+            ]}
             onAccessibilityAction={this._onAccessibilityAction}
             maximumValue={maximumValue}
             minimumValue={minimumValue}
@@ -155,56 +202,82 @@ class AppComponent extends PureComponent {
           />
         </View>
         <View style={{ flex: 1 }}>
-          <ScrollView>
-            <AccessibleHorizontalList accessibilityLabel={'Complex List '} data={complexes} renderItem={this._renderComplex} />
-            <AccessibleHorizontalList accessibilityLabel={'Poster List '} data={posters} renderItem={this._renderPoster} />
-            <AccessibleHorizontalList accessibilityLabel={'Landscape List '} data={landscapes} renderItem={this._renderLandscape} />
-            <AccessibleHorizontalList accessibilityLabel={'Blurry List '} data={blurry} renderItem={this._renderBlurry} />
-            <AccessibleHorizontalList accessibilityLabel={'Complex List '} data={complexes} renderItem={this._renderComplex} />
-            <AccessibleHorizontalList accessibilityLabel={'Poster List '} data={posters} renderItem={this._renderPoster} />
-            <AccessibleHorizontalList accessibilityLabel={'Landscape List '} data={landscapes} renderItem={this._renderLandscape} />
-            <AccessibleHorizontalList accessibilityLabel={'Blurry List '} data={blurry} renderItem={this._renderBlurry} />
-            <AccessibleHorizontalList accessibilityLabel={'Complex List '} data={complexes} renderItem={this._renderComplex} />
-            <AccessibleHorizontalList accessibilityLabel={'Poster List '} data={posters} renderItem={this._renderPoster} />
-            <AccessibleHorizontalList accessibilityLabel={'Landscape List '} data={landscapes} renderItem={this._renderLandscape} />
-            <AccessibleHorizontalList accessibilityLabel={'Blurry List '} data={blurry} renderItem={this._renderBlurry} />
-          </ScrollView>
+          <FlatList
+            data={this.state.lists}
+            initialNumToRender={2}
+            removeClippedSubviews
+            keyExtractor={(data, index) => `section-${index}`}
+            maxToRenderPerBatch={4}
+            updateCellsBatchingPeriod={150}
+            onEndReachedThreshold={0.25}
+            scrollEventThrottle={16}
+            renderItem={({ item }) => {
+              return (
+                <View>
+                  <Text
+                    accessible={false}
+                    style={{
+                      color: "white",
+                      fontSize: 24,
+                      marginBottom: 12,
+                      textAlign: "center",
+                    }}
+                  >
+                    {item.title}
+                  </Text>
+                  <AccessibleHorizontalList
+                    accessibilityLabel={item.title}
+                    data={complexes}
+                    renderItem={this._renderComplex}
+                  />
+                </View>
+              );
+            }}
+          />
         </View>
-        <View style={{
-          flexDirection: 'row',
-          justifyContent: 'center',
-          padding: FormFactor.isTV ? 25 : 5,
-          backgroundColor: 'white',
-        }}>
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "center",
+            padding: FormFactor.isTV ? 25 : 5,
+            backgroundColor: "white",
+          }}
+        >
           <Button
-            title={'1'}
-            onPress={() => {AccessibilityInfo.announceForAccessibility('Button 1 was tapped')}}
-            accessibilityLabel={'1'}
+            title={"1"}
+            onPress={() => {
+              AccessibilityInfo.announceForAccessibility("Button 1 was tapped");
+            }}
+            accessibilityLabel={"1"}
           />
           <Button
-            title={'2'}
-            onPress={() => {AccessibilityInfo.announceForAccessibility('Button 2 was tapped')}}
-            accessibilityLabel={'2'}
+            title={"2"}
+            onPress={() => {
+              AccessibilityInfo.announceForAccessibility("Button 2 was tapped");
+            }}
+            accessibilityLabel={"2"}
           />
           <Button
-            title={'3'}  
-            onPress={() => {AccessibilityInfo.announceForAccessibility('Button 3 was tapped')}}
-            accessibilityLabel={'3'}
+            title={"3"}
+            onPress={() => {
+              AccessibilityInfo.announceForAccessibility("Button 3 was tapped");
+            }}
+            accessibilityLabel={"3"}
           />
         </View>
       </View>
     );
   };
-};
+}
 
 const styles = {
   photoStyle: {
-    width: FormFactor.isTV ? 490: 98,
-    height: FormFactor.isTV ? 370: 74,
+    width: FormFactor.isTV ? 490 : 98,
+    height: FormFactor.isTV ? 370 : 74,
   },
   posterStyle: {
     width: FormFactor.isTV ? 250 : 50,
-    height: FormFactor.isTV ? 375: 75,
+    height: FormFactor.isTV ? 375 : 75,
   },
   wideStyle: {
     width: FormFactor.isTV ? 400 : 160,
@@ -212,7 +285,7 @@ const styles = {
   },
 };
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   const { photos, complexes } = state;
 
   return { photos, complexes };
