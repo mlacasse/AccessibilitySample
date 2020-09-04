@@ -213,7 +213,7 @@ class AppComponent extends PureComponent {
             scrollEventThrottle={16}
             renderItem={({ item }) => {
               return (
-                <View>
+                <View accessible style={{ height: 900 }}>
                   <Text
                     accessible={false}
                     style={{
