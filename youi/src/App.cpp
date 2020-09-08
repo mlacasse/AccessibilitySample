@@ -6,6 +6,10 @@
 #include <cxxreact/JSBigString.h>
 #include <glog/logging.h>
 
+#if defined(YI_DEBUG)
+#include <debug/YiDevPanel.h>
+#endif
+
 App::App() = default;
 
 App::~App() = default;
@@ -81,7 +85,14 @@ bool App::UserInit()
 
     PlatformApp::SetJsBundleLoader(std::move(pBundleLoader));
 
-    return PlatformApp::UserInit();
+    bool bSuccess = PlatformApp::UserInit();
+
+#ifdef YI_DEBUG
+    // explicitly enable remote JS debugging when set to true
+    GetBridge().SetRemoteDebuggingEnabled(false);
+#endif
+
+    return bSuccess;
 }
 
 bool App::UserStart()

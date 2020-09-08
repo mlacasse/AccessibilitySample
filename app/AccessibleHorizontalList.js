@@ -86,14 +86,15 @@ class AccessibleHorizontalList extends PureComponent {
     };
 
     return (
-      <FlatList
-        ref={this.listRef}
-        horizontal
-        keyExtractor={item => "" + item.id}
-        data={data}
-        renderItem={this._renderItem}
-        {...accessibilityProps}
-      />
+      <View {...accessibilityProps}>
+        <FlatList
+          ref={this.listRef}
+          horizontal
+          keyExtractor={item => "" + item.id}
+          data={data}
+          renderItem={this._renderItem}
+        />
+      </View>
     )
   }
 }
