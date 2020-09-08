@@ -75,10 +75,10 @@ class AccessibleHorizontalList extends PureComponent {
   }
 
   render() {
-    const { data = [], accessibilityLabel } = this.props;
+    const { data = [], accessible = true, accessibilityLabel } = this.props;
 
     const accessibilityProps = {
-      accessible: true,
+      accessible: accessible,
       accessibilityLabel,
       accessibilityRole: 'adjustable',
       accessibilityActions: [{ name: 'activate' }, { name: 'increment' }, { name: 'decrement' }],
