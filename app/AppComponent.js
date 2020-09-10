@@ -1,8 +1,9 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, createRef } from 'react';
 import { AccessibilityInfo, Button, NativeModules, ScrollView, Slider, Text, View } from 'react-native';
-import { FormFactor } from '@youi/react-native-youi';
+import { FormFactor, Video } from '@youi/react-native-youi';
 import { connect } from 'react-redux';
 
+import Scaler from './Scaler';
 import Photo from './Photo';
 import Complex from './Complex';
 import AccessibleHorizontalList from './AccessibleHorizontalList';
@@ -30,6 +31,8 @@ class AppComponent extends PureComponent {
     // 6 = AutoUpright
 
     OrientationLock.setRotationMode(6);
+
+    this.videoRef = createRef();
   }
 
   componentDidMount() {
@@ -136,6 +139,21 @@ class AppComponent extends PureComponent {
           <Text style={{ fontSize: FormFactor.isTV ? 60 : 14, color: 'black' }}>Accessibility Sample</Text>
           <Text style={{ fontSize: FormFactor.isTV ? 40 : 8, color: 'black' }}>{accessibilityText}</Text>
         </View>
+        <Scaler
+          xRatio={16} 
+          yRatio={9}
+        >
+          <Video
+            ref={this.videoRef}
+            style={{ width: '100%', height: '100%' }}
+            source={{
+              uri: 'https://devstreaming-cdn.apple.com/videos/streaming/examples/bipbop_16x9/bipbop_16x9_variant.m3u8',
+              type: 'HLS'
+            }}
+            muted={true}
+            onReady={() => this.videoRef.current.play()}
+          />
+        </Scaler>
         <View style={{
           alignItems: 'center',
           padding: FormFactor.isTV ? 25 : 5,
