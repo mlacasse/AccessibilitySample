@@ -211,9 +211,16 @@ class AppComponent extends PureComponent {
             updateCellsBatchingPeriod={150}
             onEndReachedThreshold={0.25}
             scrollEventThrottle={16}
+            ListHeaderComponent={<View><Text style={{
+                color: "white",
+                fontSize: 24,
+                marginBottom: 12,
+                textAlign: "center",
+            }}>I'm A List Header</Text></View>}
             renderItem={({ item }) => {
               return (
-                <View accessible style={{ height: 900 }}>
+
+                <View accessible>
                   <Text
                     accessible={false}
                     style={{
