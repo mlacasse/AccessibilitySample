@@ -1,5 +1,5 @@
 import React, { PureComponent, createRef } from 'react';
-import { AccessibilityInfo, Button, NativeModules, ScrollView, Slider, Text, View } from 'react-native';
+import { AccessibilityInfo, Button, NativeModules, ScrollView, Slider, Text, TouchableOpacity, View } from 'react-native';
 import { FormFactor, Video } from '@youi/react-native-youi';
 import { connect } from 'react-redux';
 
@@ -122,12 +122,12 @@ class AppComponent extends PureComponent {
   };
 
   render = () => {
-    const { maximumValue, minimumValue, step, value } = this.state;
+    const { accessible, maximumValue, minimumValue, step, value } = this.state;
 
     const { posters, landscapes, blurry } = this.props.photos;
     const { complexes } = this.props.complexes;
 
-    const accessibilityText = this.state.accessible ? 'accessibility enabled' : 'accessibility disabled';
+    const accessibilityText = accessible ? 'accessibility enabled' : 'accessibility disabled';
 
     return (
       <View style={{ flex: 1 }}>
@@ -137,7 +137,15 @@ class AppComponent extends PureComponent {
           backgroundColor: 'white',
         }}>
           <Text style={{ fontSize: FormFactor.isTV ? 60 : 14, color: 'black' }}>Accessibility Sample</Text>
-          <Text style={{ fontSize: FormFactor.isTV ? 40 : 8, color: 'black' }}>{accessibilityText}</Text>
+          <TouchableOpacity onPress={() => console.log('pressed')}>
+            <Text
+              accessible
+              accessibilityRole="button"
+              accessibilityHint="Hint Text"
+              accessibilityLabel={`${accessibilityText}`}
+              style={{ fontSize: FormFactor.isTV ? 40 : 8, color: 'black' }}
+            >{accessibilityText}</Text>
+          </TouchableOpacity>
         </View>
         <Scaler
           xRatio={16} 
